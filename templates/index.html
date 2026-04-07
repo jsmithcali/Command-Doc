@@ -13,23 +13,28 @@
         .status { font-weight: bold; }
         .online { color: green; }
         .offline { color: red; }
+        .env-section { background: #e9ecef; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>AI Agent Web Dashboard</h1>
-        <p style="text-align: center;">Unified launcher for OpenHands, Devika, and OpenClaw</p>
         
-        {% for id, service in services.items() %}
+        <div class="env-section">
+            <h3>Configuration</h3>
+            <p><strong>Google Account:</strong> {{ google_account }}</p>
+            <p><strong>Gemini API Key:</strong> {% if gemini_key %}****{{ gemini_key[-4:] }}{% else %}Not Set{% endif %}</p>
+        </div>
+
+        {% for name, info in services.items() %}
         <div class="service-card">
             <div class="service-header">
-                <h2>{{ service.name }}</h2>
-                <span class="status offline">Status: Not Running</span>
+                <h2>{{ name | title }}</h2>
+                <span class="status {{ info.status }}">{{ info.status | upper }}</span>
             </div>
-            <p>Runs on Port: {{ service.port }}</p>
+            <p>Port: {{ info.port }}</p>
             <div>
-                <a href="/start/{{ id }}" class="btn">Start {{ service.name }}</a>
-                <a href="http://{{ request.host.split(':')[0] }}:{{ service.port }}" target="_blank" class="btn" style="background: #28a745;">Open Web UI</a>
+                <a href="http://152.70.119.22:{{ info.port }}" class="btn" target="_blank">Open UI</a>
             </div>
         </div>
         {% endfor %}
